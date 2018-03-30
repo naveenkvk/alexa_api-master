@@ -48,6 +48,17 @@ class TransactionResource(Resource):
         session.add(transaction)
         session.commit()
         return transaction, 201
+		
+	@marshal_with(transaction_fields)
+    def post(self):
+        parsed_args = parser.parse_args()
+        transaction_type=parsed_args['transaction_type']
+		account_id=parsed_args['account_id']
+		transaction = session.query(Transaction).filter_by(func.lower(Transaction.transaction_type) == func.lower(transaction_type),
+															func.lower(Transaction.account_id) == func.lower(account_id)).all()
+        if not transaction:
+            abort(404, message="Transaction {} doesn't exist".format(transaction_type))
+        return transaction, 201
 
 
 class TransactionListResource(Resource):

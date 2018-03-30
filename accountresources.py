@@ -7,12 +7,15 @@ from flask.ext.restful import abort
 from flask.ext.restful import Resource
 from flask.ext.restful import fields
 from flask.ext.restful import marshal_with
+from sqlalchemy import func
 
 account_fields = {
     'account_id': fields.Integer,
     'account_name': fields.String,
     'account_type': fields.String,
     'account_status': fields.String,
+    'account_balance' : fields.String,
+    'create_timestamp' : fields.DateTime,
     'uri': fields.Url('account', absolute=True),
 }
 
@@ -22,13 +25,13 @@ parser.add_argument('account_name', type=str)
 class AccountResource(Resource):
     @marshal_with(account_fields)
     def get(self, account_name):
-        account = session.query(Account).filter(Account.account_name == account_name).first()
+        account = session.query(Account).filter(func.lower(Account.account_name) == func.lower(account_name)).first()
         if not account:
             abort(404, message="Account {} doesn't exist".format(account_name))
         return account
 
     def delete(self, account_name):
-        account = session.query(Account).filter(Account.account_name == account_name).first()
+        account = session.query(Account).filter(func.lower(Account.account_name) == func.lower(account_name)).first()
         if not account:
             abort(404, message="Account {} doesn't exist".format(account_name))
         session.delete(account)
@@ -38,7 +41,7 @@ class AccountResource(Resource):
     @marshal_with(account_fields)
     def put(self, account_name):
         parsed_args = parser.parse_args()
-        account = session.query(Account).filter(Account.account_name == account_name).first()
+        account = session.query(Account).filter(func.lower(Account.account_name) == func.lower(account_name)).first()
         account.task = parsed_args['account_name']
         session.add(account)
         session.commit()

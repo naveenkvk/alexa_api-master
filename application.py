@@ -25,6 +25,10 @@ api.add_resource(AccountResource, '/account/<string:account_name>', endpoint='ac
 api.add_resource(TransactionListResource, '/transaction', endpoint='transactions')
 api.add_resource(TransactionResource, '/transaction/<string:transaction_type>', endpoint='transaction')
 
+api.add_resource(TicketListResource, '/ticket', endpoint='tickets')
+api.add_resource(TicketToResource, '/ticket/<string:assigned_to>', endpoint='assigned_to')
+api.add_resource(TicketByResource, '/ticket/<string:requestor>', endpoint='requestor')
+
 
 if __name__ == '__main__':
     app.run(debug=True)

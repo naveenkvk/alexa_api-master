@@ -37,7 +37,7 @@ class Transaction(Base):
     net_transaction_amt = Column(Numeric)
     transaction_qty = Column(Numeric)
     account_id = Column(Integer, ForeignKey("account.account_id"))
-	
+
 class ServiceNow(Base):
     __tablename__ = 'service_now'
 
@@ -47,11 +47,10 @@ class ServiceNow(Base):
     ticket_description = Column(String(255))
     ticket_comment = Column(String(255))
     create_date = Column(DateTime)
-	priotity = Column(String(25))
-	assigned_to = Column(String(255))
-	assignment_group = Column(String(255))
-	requestor = Column(String(255))
-    
+    priotity = Column(String(25))
+    assigned_to = Column(String(255))
+    assignment_group = Column(String(255))
+    requestor = Column(String(255))
 
 if __name__ == "__main__":
     from sqlalchemy import create_engine
